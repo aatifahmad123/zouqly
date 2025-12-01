@@ -5,7 +5,9 @@ import ProductCard from '../components/ProductCard';
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
-  const categories = ['All', ...Array.from(new Set(products.map(p => p.category)))];
+  const allCategories = ['All', ...Array.from(new Set(products.map(p => p.category)))];
+  // Add 'Raisins (Coming Soon)' to the categories list
+  const categories = [...new Set([...allCategories, 'Raisins (Coming Soon)'])];
 
   const filteredProducts =
     selectedCategory === 'All'
