@@ -1,24 +1,27 @@
-import { useState } from 'react';
-import { CartProvider } from './contexts/CartContext';
-import Navbar from './components/Navbar';
-import HomePage from './pages/HomePage';
-import ProductsPage from './pages/ProductsPage';
-import AboutPage from './pages/AboutPage';
-import CheckoutPage from './pages/CheckoutPage';
-import CartSidebar from './components/CartSidebar';
+import { useState } from "react";
+import { CartProvider } from "./contexts/CartContext";
+import Navbar from "./components/Navbar";
+import HomePage from "./pages/HomePage";
+import ProductsPage from "./pages/ProductsPage";
+import AboutPage from "./pages/AboutPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import CartSidebar from "./components/CartSidebar";
+import zouqlyFooterImage from "./assets/zouqly-image.jpeg";
+import huboFallFooterImage from "./assets/hubo-fall-image.jpeg";
+import logoIcon from "./assets/logo-icon.png";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<string>('home');
+  const [currentPage, setCurrentPage] = useState<string>("home");
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const handleNavigate = (page: string) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleCheckout = () => {
-    setCurrentPage('checkout');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setCurrentPage("checkout");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -31,10 +34,12 @@ function App() {
         />
 
         <main className="pt-20">
-          {currentPage === 'home' && <HomePage onNavigate={handleNavigate} />}
-          {currentPage === 'products' && <ProductsPage />}
-          {currentPage === 'about' && <AboutPage />}
-          {currentPage === 'checkout' && <CheckoutPage onBack={() => handleNavigate('products')} />}
+          {currentPage === "home" && <HomePage onNavigate={handleNavigate} />}
+          {currentPage === "products" && <ProductsPage />}
+          {currentPage === "about" && <AboutPage />}
+          {currentPage === "checkout" && (
+            <CheckoutPage onBack={() => handleNavigate("products")} />
+          )}
         </main>
 
         <CartSidebar
@@ -48,16 +53,19 @@ function App() {
             <div className="grid md:grid-cols-3 gap-8 mb-8">
               <div>
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-xl">Z</span>
-                  </div>
+                  <img
+                    src={logoIcon}
+                    alt="Zouqly Logo"
+                    className="w-12 h-12 object-contain"
+                  />
                   <div>
                     <h3 className="text-xl font-bold">Zouqly</h3>
                     <p className="text-sm text-gray-400">Your Taste Habit</p>
                   </div>
                 </div>
                 <p className="text-gray-400 leading-relaxed">
-                  Premium handpicked dry fruits that bring nature's finest treasures to your table.
+                  Premium handpicked dry fruits that bring nature's finest
+                  treasures to your table.
                 </p>
               </div>
 
@@ -66,7 +74,7 @@ function App() {
                 <ul className="space-y-2">
                   <li>
                     <button
-                      onClick={() => handleNavigate('home')}
+                      onClick={() => handleNavigate("home")}
                       className="text-gray-400 hover:text-amber-500 transition-colors"
                     >
                       Home
@@ -74,7 +82,7 @@ function App() {
                   </li>
                   <li>
                     <button
-                      onClick={() => handleNavigate('products')}
+                      onClick={() => handleNavigate("products")}
                       className="text-gray-400 hover:text-amber-500 transition-colors"
                     >
                       Products
@@ -82,7 +90,7 @@ function App() {
                   </li>
                   <li>
                     <button
-                      onClick={() => handleNavigate('about')}
+                      onClick={() => handleNavigate("about")}
                       className="text-gray-400 hover:text-amber-500 transition-colors"
                     >
                       About Us
@@ -102,8 +110,24 @@ function App() {
               </div>
             </div>
 
-            <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-              <p>&copy; 2024 Zouqly - Hubo Fall Ventures LLP. All rights reserved.</p>
+            <div className="border-t border-gray-800 pt-8 pb-4 flex flex-col md:flex-row items-center justify-center gap-8">
+              <img
+                src={zouqlyFooterImage}
+                alt="Zouqly"
+                className="h-24 md:h-32 w-auto object-contain"
+              />
+              <img
+                src={huboFallFooterImage}
+                alt="Hubo Fall Ventures LLP"
+                className="h-24 md:h-32 w-auto object-contain"
+              />
+            </div>
+
+            <div className="border-t border-gray-800 pt-4 text-center text-gray-400">
+              <p>
+                &copy; 2024 Zouqly - Hubo Fall Ventures LLP. All rights
+                reserved.
+              </p>
             </div>
           </div>
         </footer>
