@@ -74,7 +74,9 @@ export async function saveOrderToGoogleSheets(orderData: OrderData): Promise<voi
       })
     };
 
-    const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+    // With no-cors mode, we can't read the response, but the request is sent
+    // The Google Apps Script will handle the data insertion
+    await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors', // Google Apps Script doesn't support CORS, so we use no-cors
       headers: {
@@ -83,8 +85,6 @@ export async function saveOrderToGoogleSheets(orderData: OrderData): Promise<voi
       body: JSON.stringify(sheetData)
     });
 
-    // With no-cors mode, we can't read the response, but the request is sent
-    // The Google Apps Script will handle the data insertion
     console.log('Order data sent to Google Sheets');
   } catch (error) {
     console.error('Error saving to Google Sheets:', error);

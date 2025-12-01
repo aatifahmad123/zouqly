@@ -43,8 +43,11 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
   };
 
   const deliveryRate = useMemo(() => {
-    if (!formData.location || formData.location === "") return 0;
-    return DELIVERY_RATES[formData.location];
+    if (!formData.location) return 0;
+    if (formData.location in DELIVERY_RATES) {
+      return DELIVERY_RATES[formData.location as keyof typeof DELIVERY_RATES];
+    }
+    return 0;
   }, [formData.location]);
 
   const totalAmount = useMemo(() => {
