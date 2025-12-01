@@ -2,6 +2,7 @@ import { ShoppingCart, Plus, Minus } from 'lucide-react';
 import { useState } from 'react';
 import type { Product } from '../data/products';
 import { useCart } from '../contexts/CartContext';
+import ProductModal from './ProductModal';
 
 interface ProductCardProps {
   product: Product;
@@ -10,9 +11,11 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { addToCart } = useCart();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsAdding(true);
     addToCart(product, quantity);
     setTimeout(() => {
@@ -21,11 +24,26 @@ export default function ProductCard({ product }: ProductCardProps) {
     }, 800);
   };
 
-  const incrementQuantity = () => setQuantity(prev => prev + 1);
-  const decrementQuantity = () => setQuantity(prev => Math.max(1, prev - 1));
+  const incrementQuantity = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setQuantity(prev => prev + 1);
+  };
+
+  const decrementQuantity = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setQuantity(prev => Math.max(1, prev - 1));
+  };
+
+  const handleCardClick = () => {
+    setIsModalOpen(true);
+  };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl group">
+    <>
+      <div 
+        onClick={handleCardClick}
+        className="bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl group cursor-pointer"
+      >
       <div className="relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50 h-56">
         <img
           src={product.image}
@@ -85,5 +103,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         </button>
       </div>
     </div>
+
+    <ProductModal
+      product={product}
+      isOpen={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+    />
+    </>
   );
 }

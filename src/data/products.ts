@@ -1,3 +1,12 @@
+import premiumMixImage from '../assets/premium-mix-dryfruits.png';
+import premiumAlmondsImage from '../assets/premium-almonds.png';
+import premiumCashewsImage from '../assets/premium-cashews.png';
+import premiumPistachiosImage from '../assets/premium-pistachios.png';
+import premiumWalnutsImage from '../assets/premium-walnuts.png';
+import premiumAlmondsFamilyPackImage from '../assets/premium-almonds-family-pack.png';
+import premiumPistachiosFamilyPackImage from '../assets/premium-pistachios-family-pack.png';
+import premiumCashewsFamilyPackImage from '../assets/premium-cashews-family-pack.png';
+
 export interface Product {
   id: string;
   name: string;
@@ -22,7 +31,7 @@ export const products: Product[] = [
       'Hygienically sealed for freshness',
       'Balanced source of vitamins & minerals'
     ],
-    image: 'https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: premiumMixImage,
     category: 'Mix'
   },
   {
@@ -37,7 +46,7 @@ export const products: Product[] = [
       'No added colors or preservatives',
       'Great for desserts, gravies & gifting'
     ],
-    image: 'https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: premiumCashewsImage,
     category: 'Cashews'
   },
   {
@@ -52,7 +61,7 @@ export const products: Product[] = [
       'Premium resealable pack',
       'Ideal for snacks & garnishing'
     ],
-    image: 'https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: premiumPistachiosImage,
     category: 'Pistachios'
   },
   {
@@ -67,7 +76,7 @@ export const products: Product[] = [
       'No preservatives, no artificial flavors',
       'Boosts energy, immunity & brain health'
     ],
-    image: 'https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: premiumAlmondsImage,
     category: 'Almonds'
   },
   {
@@ -82,7 +91,7 @@ export const products: Product[] = [
       'Premium airtight packaging',
       'No chemicals or preservatives'
     ],
-    image: 'https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: premiumWalnutsImage,
     category: 'Walnuts'
   },
   {
@@ -97,7 +106,7 @@ export const products: Product[] = [
       'No preservatives, no artificial flavors',
       'Boosts energy, immunity & brain health'
     ],
-    image: 'https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: premiumCashewsFamilyPackImage,
     category: 'Cashews'
   },
   {
@@ -112,7 +121,7 @@ export const products: Product[] = [
       'No preservatives, no artificial flavors',
       'Boosts energy, immunity & brain health'
     ],
-    image: 'https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: premiumPistachiosFamilyPackImage,
     category: 'Pistachios'
   },
   {
@@ -127,7 +136,7 @@ export const products: Product[] = [
       'No preservatives, no artificial flavors',
       'Boosts energy, immunity & brain health'
     ],
-    image: 'https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: premiumAlmondsFamilyPackImage,
     category: 'Almonds'
   }
 ];

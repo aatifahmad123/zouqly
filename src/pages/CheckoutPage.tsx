@@ -1,36 +1,92 @@
-import { useState } from 'react';
-import { useCart } from '../contexts/CartContext';
-import { CheckCircle, Package, User, MapPin } from 'lucide-react';
+import { useState, useMemo } from "react";
+import { useCart } from "../contexts/CartContext";
+import { CheckCircle, Package, User, MapPin } from "lucide-react";
+import { saveOrderToGoogleSheets } from "../utils/googleSheets";
 
 interface CheckoutPageProps {
   onBack: () => void;
 }
 
+type DeliveryLocation = "delhi" | "ncr" | "outside" | "";
+
+const DELIVERY_RATES = {
+  delhi: 50,
+  ncr: 70,
+  outside: 90,
+};
+
 export default function CheckoutPage({ onBack }: CheckoutPageProps) {
   const { cart, getCartTotal, clearCart } = useCart();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    pincode: '',
-    notes: ''
+    fullName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+    location: "" as DeliveryLocation,
+    notes: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const deliveryRate = useMemo(() => {
+    if (!formData.location || formData.location === "") return 0;
+    return DELIVERY_RATES[formData.location];
+  }, [formData.location]);
+
+  const totalAmount = useMemo(() => {
+    return getCartTotal() + deliveryRate;
+  }, [getCartTotal, deliveryRate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    clearCart();
+    setIsSubmitting(true);
+
+    try {
+      const orderData = {
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        pincode: formData.pincode,
+        location: formData.location,
+        notes: formData.notes || "",
+        items: cart.map((item) => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          weight: item.weight,
+        })),
+        subtotal: getCartTotal(),
+        deliveryCharge: deliveryRate,
+        total: totalAmount,
+        orderDate: new Date().toISOString(),
+      };
+
+      await saveOrderToGoogleSheets(orderData);
+      setIsSubmitted(true);
+      clearCart();
+    } catch (error) {
+      console.error("Error saving order:", error);
+      alert("There was an error placing your order. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
@@ -40,12 +96,17 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle size={48} className="text-green-600" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Order Placed Successfully!</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            Order Placed Successfully!
+          </h2>
           <p className="text-gray-600 mb-2 leading-relaxed">
-            Thank you for your order, <span className="font-semibold">{formData.fullName}</span>!
+            Thank you for your order,{" "}
+            <span className="font-semibold">{formData.fullName}</span>!
           </p>
           <p className="text-gray-600 mb-8 leading-relaxed">
-            We'll contact you shortly at <span className="font-semibold">{formData.phone}</span> to confirm your order.
+            We'll contact you shortly at{" "}
+            <span className="font-semibold">{formData.phone}</span> to confirm
+            your order.
           </p>
           <button
             onClick={onBack}
@@ -63,15 +124,22 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Checkout</h1>
-          <p className="text-gray-600">Complete your order by filling in your details</p>
+          <p className="text-gray-600">
+            Complete your order by filling in your details
+          </p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8">
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white rounded-2xl shadow-lg p-8"
+            >
               <div className="flex items-center space-x-3 mb-6 pb-4 border-b-2 border-gray-100">
                 <User size={24} className="text-amber-600" />
-                <h2 className="text-2xl font-bold text-gray-800">Contact Information</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Contact Information
+                </h2>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -123,7 +191,9 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
 
               <div className="flex items-center space-x-3 mb-6 pb-4 border-b-2 border-gray-100 mt-8">
                 <MapPin size={24} className="text-amber-600" />
-                <h2 className="text-2xl font-bold text-gray-800">Delivery Address</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Delivery Address
+                </h2>
               </div>
 
               <div className="mb-6">
@@ -139,6 +209,26 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
                   className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-amber-500 focus:outline-none transition-colors"
                   placeholder="House no, Street name"
                 />
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Delivery Location *
+                </label>
+                <select
+                  name="location"
+                  required
+                  value={formData.location}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-amber-500 focus:outline-none transition-colors"
+                >
+                  <option value="">Select your location</option>
+                  <option value="delhi">Within Delhi</option>
+                  <option value="ncr">
+                    Outside Delhi but within Delhi NCR
+                  </option>
+                  <option value="outside">Outside Delhi NCR</option>
+                </select>
               </div>
 
               <div className="grid md:grid-cols-3 gap-6 mb-6">
@@ -212,9 +302,10 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-amber-600 to-orange-600 text-white py-3 rounded-xl font-semibold hover:from-amber-700 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  disabled={isSubmitting || !formData.location}
+                  className="flex-1 bg-gradient-to-r from-amber-600 to-orange-600 text-white py-3 rounded-xl font-semibold hover:from-amber-700 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Place Order
+                  {isSubmitting ? "Placing Order..." : "Place Order"}
                 </button>
               </div>
             </form>
@@ -224,14 +315,21 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
               <div className="flex items-center space-x-3 mb-6 pb-4 border-b-2 border-gray-100">
                 <Package size={24} className="text-amber-600" />
-                <h2 className="text-xl font-bold text-gray-800">Order Summary</h2>
+                <h2 className="text-xl font-bold text-gray-800">
+                  Order Summary
+                </h2>
               </div>
 
               <div className="space-y-4 mb-6">
-                {cart.map(item => (
-                  <div key={item.id} className="flex justify-between items-start">
+                {cart.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex justify-between items-start"
+                  >
                     <div className="flex-1">
-                      <p className="font-semibold text-gray-800 text-sm">{item.name}</p>
+                      <p className="font-semibold text-gray-800 text-sm">
+                        {item.name}
+                      </p>
                       <p className="text-xs text-gray-500">
                         {item.weight} × {item.quantity}
                       </p>
@@ -250,17 +348,25 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Delivery</span>
-                  <span className="font-semibold text-green-600">FREE</span>
+                  <span className="font-semibold">
+                    {formData.location ? (
+                      `₹${deliveryRate}`
+                    ) : (
+                      <span className="text-gray-400">Select location</span>
+                    )}
+                  </span>
                 </div>
                 <div className="flex justify-between text-xl font-bold text-gray-800 pt-3 border-t-2 border-gray-100">
                   <span>Total</span>
-                  <span className="text-amber-600">₹{getCartTotal()}</span>
+                  <span className="text-amber-600">₹{totalAmount}</span>
                 </div>
               </div>
 
               <div className="mt-6 bg-amber-50 rounded-lg p-4">
                 <p className="text-sm text-gray-700 leading-relaxed">
-                  <span className="font-semibold">Payment:</span> Cash on Delivery available. We'll confirm your order via phone before delivery.
+                  <span className="font-semibold">Payment:</span> Cash on
+                  Delivery available. We'll confirm your order via phone before
+                  delivery.
                 </p>
               </div>
             </div>

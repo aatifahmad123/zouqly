@@ -1,6 +1,7 @@
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '../contexts/CartContext';
+import logoIcon from '../assets/logo-icon.png';
 
 interface NavbarProps {
   currentPage: string;
@@ -21,9 +22,11 @@ export default function Navbar({ currentPage, onNavigate, onCartClick }: NavbarP
             onClick={() => onNavigate('home')}
             className="flex items-center space-x-3 group"
           >
-            <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-              <span className="text-white font-bold text-2xl">Z</span>
-            </div>
+            <img 
+              src={logoIcon} 
+              alt="Zouqly Logo" 
+              className="w-14 h-14 object-contain transform group-hover:scale-110 transition-transform duration-300"
+            />
             <div>
               <h1 className="text-2xl font-bold text-gray-800 group-hover:text-amber-600 transition-colors">
                 Zouqly
