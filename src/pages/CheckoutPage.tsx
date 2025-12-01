@@ -430,8 +430,8 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
                         </p>
                       </div>
                     </div>
-                    <span className={`font-semibold text-gray-800 ${
-                      theme === 'dark' ? 'text-gray-200' : ''
+                    <span className={`font-semibold ${
+                      theme === 'dark' ? 'text-white' : 'text-gray-800'
                     }`}>
                       ₹{item.price * item.quantity}
                     </span>
