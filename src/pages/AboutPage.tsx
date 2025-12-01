@@ -1,15 +1,22 @@
 import { Target, Eye, CheckCircle } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function AboutPage() {
+  const { theme } = useTheme();
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-white">
+    <div className={`min-h-screen transition-colors duration-300 ${
+      theme === 'dark' 
+        ? 'bg-gray-900 text-gray-100' 
+        : 'bg-gradient-to-br from-amber-50 via-orange-50 to-white text-gray-800'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">About Zouqly</h1>
-          <p className="text-2xl text-amber-600 font-semibold mb-6">
+          <h1 className="text-5xl font-bold mb-4">About Zouqly</h1>
+          <p className={`text-2xl ${theme === 'dark' ? 'text-amber-400' : 'text-amber-600'} font-semibold mb-6`}>
             "A name that celebrates flavor, purity, and the art of savoring life."
           </p>
-          <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className={`text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} max-w-4xl mx-auto leading-relaxed`}>
             At Zouqly, we bring you nature's finest treasures in the form of handpicked premium dry fruits.
             Every product is crafted with care, combining health, taste, and tradition into one. With
             premium packaging and uncompromised quality, Zouqly is not just about dry fruits — it's about
@@ -18,43 +25,43 @@ export default function AboutPage() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-12 mb-16">
-          <div className="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-shadow duration-300">
+          <div className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300`}>
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center">
                 <Target size={32} className="text-white" />
               </div>
-              <h2 className="text-3xl font-bold text-gray-800">Mission</h2>
+              <h2 className={`text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>Mission</h2>
             </div>
-            <h3 className="text-xl font-bold text-amber-600 mb-4">
+            <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-amber-400' : 'text-amber-600'} mb-4`}>
               "Premium Nutrition in Every Bite"
             </h3>
-            <p className="text-gray-600 leading-relaxed text-lg">
+            <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} leading-relaxed text-lg`}>
               We are committed to delivering healthy, pure, and luxurious dry fruit products that
               enrich everyday living.
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-shadow duration-300">
+          <div className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300`}>
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center">
                 <Eye size={32} className="text-white" />
               </div>
-              <h2 className="text-3xl font-bold text-gray-800">Vision</h2>
+              <h2 className={`text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>Vision</h2>
             </div>
-            <h3 className="text-xl font-bold text-amber-600 mb-4">
-              "To be a Trusted Global Brand"
+            <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-amber-400' : 'text-orange-600'} mb-4`}>
+              "Inspiring Healthier Lifestyles"
             </h3>
-            <p className="text-gray-600 leading-relaxed text-lg">
-              Our vision is to become a household name worldwide for quality dry fruits, admired for
-              authenticity, innovation, and excellence.
+            <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} leading-relaxed text-lg`}>
+              To be the most trusted brand in premium dry fruits, known for quality, innovation,
+              and making healthy snacking delightful and accessible to all.
             </p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-10">
+        <div className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} rounded-2xl shadow-xl p-10`}>
           <div className="text-center mb-10">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Core Values</h2>
-            <p className="text-gray-600 text-lg">The principles that guide everything we do</p>
+            <h2 className={`text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'} mb-4`}>Core Values</h2>
+            <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} text-lg`}>The principles that guide everything we do</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -86,17 +93,27 @@ export default function AboutPage() {
             ].map((value, index) => (
               <div
                 key={index}
-                className="group hover:bg-gradient-to-br hover:from-amber-50 hover:to-orange-50 p-6 rounded-xl transition-all duration-300"
+                className={`group p-6 rounded-xl transition-all duration-300 ${
+                  theme === 'dark' 
+                    ? 'hover:bg-gray-700' 
+                    : 'hover:bg-gradient-to-br hover:from-amber-50 hover:to-orange-50'
+                }`}
               >
                 <div className="flex items-start space-x-3 mb-3">
                   <CheckCircle size={24} className="text-amber-600 flex-shrink-0 mt-1" />
-                  <h3 className="text-xl font-bold text-gray-800 group-hover:text-amber-600 transition-colors">
-                    {value.title}
-                  </h3>
+                  <div>
+                    <h3 className={`text-xl font-bold ${
+                      theme === 'dark' 
+                        ? 'text-white group-hover:text-amber-400' 
+                        : 'text-gray-800 group-hover:text-amber-600'
+                    } transition-colors`}>
+                      {value.title}
+                    </h3>
+                    <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mt-1`}>
+                      {value.description}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-gray-600 leading-relaxed pl-9">
-                  {value.description}
-                </p>
               </div>
             ))}
           </div>
