@@ -19,7 +19,7 @@ export default function AboutPage() {
           <p className={`text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} max-w-4xl mx-auto leading-relaxed`}>
             At Zouqly, we bring you nature's finest treasures in the form of handpicked premium dry fruits.
             Every product is crafted with care, combining health, taste, and tradition into one. With
-            premium packaging and uncompromised quality, Zouqly is not just about dry fruits — it's about
+            premium packaging and uncompromised quality, Zouqly is not just about dry fruits - it's about
             shaping habits that nourish body and soul.
           </p>
         </div>
