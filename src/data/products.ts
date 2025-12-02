@@ -16,6 +16,7 @@ export interface Product {
   features: string[];
   image: string;
   category: string;
+  tags?: string[];
 }
 
 export const products: Product[] = [
@@ -26,13 +27,13 @@ export const products: Product[] = [
     price: 120,
     description: 'A balanced mix of Almonds, Cashews, Pistachios & Walnuts – the perfect on-the-go energy pack.',
     features: [
-      'Nutritious blend of dry fruits',
       'Perfect for office, travel & gifting',
       'Hygienically sealed for freshness',
       'Balanced source of vitamins & minerals'
     ],
     image: premiumMixImage,
-    category: 'Mix'
+    category: 'Mix',
+    tags: ['Winter Offer']
   },
   {
     id: 'CAS100',
@@ -62,7 +63,8 @@ export const products: Product[] = [
       'Ideal for snacks & garnishing'
     ],
     image: premiumPistachiosImage,
-    category: 'Pistachios'
+    category: 'Pistachios',
+    tags: ['Trending']
   },
   {
     id: 'ALM125',
@@ -77,7 +79,8 @@ export const products: Product[] = [
       'Boosts energy, immunity & brain health'
     ],
     image: premiumAlmondsImage,
-    category: 'Almonds'
+    category: 'Almonds',
+    tags: ['Bestseller']
   },
   {
     id: 'WAL150',

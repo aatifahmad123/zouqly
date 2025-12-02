@@ -45,13 +45,34 @@ export default function ProductCard({ product }: ProductCardProps) {
         className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/50 overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl group cursor-pointer"
       >
       <div className="relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50 h-56">
+        {product.tags?.includes('Bestseller') && (
+          <div className="absolute top-3 left-3 z-10">
+            <span className="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+              Bestseller 🔥
+            </span>
+          </div>
+        )}
+        {product.tags?.includes('Trending') && (
+          <div className="absolute top-3 left-3 z-10">
+            <span className="bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+              Trending ⚡
+            </span>
+          </div>
+        )}
+        {product.tags?.includes('Winter Offer') && (
+          <div className="absolute top-3 left-3 z-10">
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+              Winter Offer ❄️
+            </span>
+          </div>
+        )}
         <img
           src={product.image}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
-        <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full shadow-md">
-          <span className="text-sm font-semibold text-gray-700">{product.weight}</span>
+        <div className="absolute top-4 right-4 bg-white dark:bg-gray-900 px-3 py-1 rounded-full shadow-md">
+          <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">{product.weight}</span>
         </div>
       </div>
 
