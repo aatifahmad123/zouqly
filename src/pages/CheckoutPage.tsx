@@ -1,8 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useCart } from "../contexts/CartContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { CheckCircle, Package, User, MapPin } from "lucide-react";
 import { saveOrderToGoogleSheets } from "../utils/googleSheets";
+import Confetti from 'react-confetti';
+import { useWindowSize } from 'react-use';
 
 interface CheckoutPageProps {
   onBack: () => void;
@@ -17,8 +19,19 @@ const DELIVERY_RATES = {
 };
 
 export default function CheckoutPage({ onBack }: CheckoutPageProps) {
+  const { theme } = useTheme();
   const { cart, getCartTotal, clearCart } = useCart();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const { width, height } = useWindowSize();
+  
+  useEffect(() => {
+    if (isSubmitted) {
+      setShowConfetti(true);
+      const timer = setTimeout(() => setShowConfetti(false), 6000); // Increased from 3000ms to 6000ms (6 seconds)
+      return () => clearTimeout(timer);
+    }
+  }, [isSubmitted]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -94,36 +107,62 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
   };
 
   if (isSubmitted) {
+    // Scroll to top when order is submitted
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-white flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle size={48} className="text-green-600" />
+      <>
+        {showConfetti && (
+          <Confetti
+            width={width}
+            height={height}
+            recycle={false}
+            numberOfPieces={500}
+            gravity={0.2}
+            colors={['#f59e0b', '#f97316', '#fbbf24', '#fde047', '#84cc16', '#10b981']}
+            style={{ position: 'fixed', top: 0, left: 0, zIndex: 1000 }}
+          />
+        )}
+      <div className={`min-h-screen flex items-center justify-center px-4 transition-colors duration-300 ${
+        theme === 'dark' ? 'bg-gray-900' : 'bg-gradient-to-br from-green-50 via-emerald-50 to-white'
+      }`}>
+        <div className={`max-w-md w-full rounded-2xl shadow-2xl p-8 text-center transition-colors duration-300 ${
+          theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
+        }`}>
+          <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${
+            theme === 'dark' ? 'bg-green-900/30' : 'bg-green-100'
+          }`}>
+            <CheckCircle size={48} className={theme === 'dark' ? 'text-green-400' : 'text-green-600'} />
           </div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <h2 className={`text-3xl font-bold mb-4 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-800'
+          }`}>
             Order Placed Successfully!
           </h2>
-          <p className="text-gray-600 mb-2 leading-relaxed">
+          <p className={`mb-2 leading-relaxed ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             Thank you for your order,{" "}
             <span className="font-semibold">{formData.fullName}</span>!
           </p>
-          <p className="text-gray-600 mb-8 leading-relaxed">
+          <p className={`mb-8 leading-relaxed ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             We'll contact you shortly at{" "}
             <span className="font-semibold">{formData.phone}</span> to confirm
             your order.
           </p>
           <button
             onClick={onBack}
-            className="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-amber-700 hover:to-orange-700 transition-all duration-300 mt-6 shadow-lg hover:shadow-xl"
+            className="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-amber-700 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Continue Shopping
           </button>
         </div>
       </div>
+      </>
     );
   }
-
-  const { theme } = useTheme();
 
   return (
     <div
