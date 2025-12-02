@@ -1,6 +1,8 @@
-import { ArrowRight, Award, Leaf, Heart, Shield } from "lucide-react";
+import { ArrowRight, Award, Leaf, Heart, Shield, Quote } from "lucide-react";
 import { products } from "../data/products";
+import { testimonials } from "../data/testimonials";
 import ProductCard from "../components/ProductCard";
+import TestimonialCard from "../components/TestimonialCard";
 import dryFruitsBg from "../assets/dry-fruits.png";
 
 interface HomePageProps {
@@ -141,6 +143,29 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               <span>View All Products</span>
               <ArrowRight size={20} />
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-gray-900 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full mb-4">
+              <Quote className="w-8 h-8 text-amber-600 dark:text-amber-400" />
+            </div>
+            <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">
+              What Our Customers Say
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+              Don't just take our word for it. Here's what our customers have to say.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial) => (
+              <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+            ))}
           </div>
         </div>
       </section>
